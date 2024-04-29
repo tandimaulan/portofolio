@@ -22,7 +22,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-        - image: git.voltras.net:5005/dev/common/service/helpdesk-service/development:latest
+        - image: git.voltras.net:port/dev/common/service/helpdesk-service/development:latest
           imagePullPolicy: Always
           name: helpdesk-service-pod
           lifecycle:
