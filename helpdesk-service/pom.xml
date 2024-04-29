@@ -23,7 +23,7 @@
 	<repositories>
 		<repository>
 			<id>repository</id>
-			<url>http://172.16.10.86:8088/artifact</url>
+			<url>http://url</url>
 		</repository>
 	</repositories>
 
