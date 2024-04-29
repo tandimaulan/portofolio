@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helpdesk-service
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: helpdesk-service-selector
+      role: tomcat
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helpdesk-service-selector
+        role: tomcat
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - image: git.voltras.net:5005/dev/common/service/helpdesk-service/development:latest
+          imagePullPolicy: Always
+          name: helpdesk-service-pod
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh","-c","sleep 20"]
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 60
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            httpGet:
+              path: /
+              port: 8080
+          env: 
+            - name: TZ
+              value: Asia/Jakarta
+            - name: spring.profiles.active
+              value: dev
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Jakarta
+      imagePullSecrets:
+        - name: gitlab-auth

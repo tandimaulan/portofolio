@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: <name_project>
+  namespace: <namespace>
+spec:
+  selector:
+    app: <name_project>-selector
+    role: tomcat
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  type: NodePort

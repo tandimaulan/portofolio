@@ -1,0 +1,38 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: <name_project>-https
+  namespace: <namespace>
+spec:
+  parentRefs:
+  - name: shared-gateway
+    namespace: istio-ingress
+    sectionName: voltrasnet-https
+  hostnames:
+    - "live-<name_project>.voltras.net"
+  rules:
+    - backendRefs:
+      - name: <name_project>
+        port: 8080
+
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: <name_project>-http
+  namespace: <namespace>
+spec:
+  parentRefs:
+  - name: shared-gateway
+    namespace: istio-ingress
+    sectionName: voltrasnet-http
+  hostnames:
+  - "live-<name_project>.voltras.net"
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        hostname: live-<name_project>.voltras.net
+        port: 443
+        statusCode: 301

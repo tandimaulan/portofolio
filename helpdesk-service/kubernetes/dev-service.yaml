@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helpdesk-service
+  namespace: development
+spec:
+  selector:
+    app: helpdesk-service-selector
+    role: tomcat
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  type: NodePort
